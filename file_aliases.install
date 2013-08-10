@@ -11,10 +11,10 @@
  *   The system-wide schema
  */
 function file_aliases_schema_alter(&$schema) {
-  $schema['filefield_paths']['fields']['filealias'] = array(
+  $schema['file_managed']['fields']['filealias'] = array(
+    'description' => 'Alias path to file. Used by the file_aliases module.',
     'type' => 'text',
     'size' => 'medium',
-    'not null' => TRUE,
     'serialize' => TRUE,
   );
 }
@@ -23,7 +23,14 @@ function file_aliases_schema_alter(&$schema) {
  * Implements hook_install().
  */
 function file_aliases_install() {
-  db_add_field('filefield_paths', 'filealias', array('type' => 'text', 'size' => 'medium', 'not null' => TRUE, 'serialize' => TRUE));
+  // Add the filealias column.
+  db_add_field('file_managed', 'filealias', array(
+    'description' => 'Alias path to file. Used by the file_aliases module.',
+    'type' => 'text',
+    'size' => 'medium',
+    'serialize' => TRUE,
+    'initial' => '',
+  ));
 
   // Adjust module weight.
   db_update('system')
@@ -36,7 +43,7 @@ function file_aliases_install() {
  * Implements hook_uninstall().
  */
 function file_aliases_uninstall() {
-  db_drop_field('filefield_paths', 'filealias');
+  db_drop_field('file_managed', 'filealias');
   //db_query("DELETE FROM {url_alias} WHERE src LIKE '%s'", 'filefield_paths/alias/%');
 }
 
