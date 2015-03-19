@@ -28,18 +28,6 @@ function file_aliases_menu() {
 }
 
 /**
- * Implements hook_file_load().
- */
-function file_aliases_file_load($files) {
-  foreach ($files as &$file) {
-    $filefield_paths_alias = "filefield_paths/alias/{$file->fid}";
-    if (($alias = drupal_get_path_alias($filefield_paths_alias)) != $filefield_paths_alias) {
-      $file->uri = file_create_url($alias);
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_image_style().
  */
 function file_aliases_preprocess_image_style(&$variables) {
