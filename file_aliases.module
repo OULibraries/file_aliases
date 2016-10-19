@@ -100,8 +100,13 @@ function file_aliases_load_fid($fid) {
   }
 
   else {
+    drupal_page_is_cacheable(FALSE);
+    /* standard Cache-Control policy copied from bootstrap.inc */
+    $max_age = !isset($_COOKIE[session_name()]) || isset($hook_boot_headers['vary']) ? variable_get('page_cache_maximum_age', 0) : 0;
+    header("Cache-Control: public, max-age={$max_age}" );
+    /* HTTP/1.1 clients ignore the Expires header if a Cache-Control: max-age= directive is specified (see above) */
+    header("Expires: ". gmdate(DATE_RFC1123, REQUEST_TIME + $max_age));
     header("Content-Type: {$result->filemime}");
-    header('Cache-Control: public');
     readfile($result->uri);
   }
 }
